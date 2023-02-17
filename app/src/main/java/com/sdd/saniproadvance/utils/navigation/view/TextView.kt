@@ -1,0 +1,381 @@
+package com.sdd.saniproadvance.utils
+
+import android.app.Activity
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Cyan
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Color.Companion.Yellow
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.imageLoader
+import coil.request.ImageRequest
+import com.sdd.saniproadvance.R
+import com.sdd.saniproadvance.ui.theme.Purple40
+
+@Composable
+fun appIcon(){
+    Image(
+        painterResource(R.drawable.logo),
+        contentDescription = "",
+        modifier = Modifier
+            .height(130.dp)
+            .width(130.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleOutlinedTextFieldSample(block:(text:String)->Unit) {
+    var text by remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        value = text,
+        singleLine = true,
+        onValueChange = { text = it },
+        label = { Text(stringResource(id = R.string.mobile)) },
+        textStyle = TextStyle(color = Black, fontWeight = FontWeight.Normal, fontSize = 16.sp),
+        modifier = Modifier.padding(start = 26.dp, end = 26.dp).fillMaxWidth(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
+    block(text)
+}
+
+@Composable
+fun HeadingText(text: String){
+   Text(text =text,
+       modifier =Modifier.padding(start = 16.dp, end = 16.dp),
+       style = TextStyle(
+       fontSize = 22.sp,
+       fontWeight = FontWeight.Bold,
+       color = Black,
+
+   ) )
+
+}
+@Composable
+fun SimpleText(text: String){
+    Text(text =text,
+        modifier =Modifier.padding(start = 16.dp, end = 16.dp),
+        style = TextStyle(
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal,
+            color = Gray,
+            ) )
+
+}
+@Composable
+fun ButtonText(text: String){
+    Text(text =text,
+        modifier =Modifier.padding(start = 16.dp, end = 16.dp),
+        style = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = White,
+            ) )
+
+}
+
+@Composable
+fun StringResourceText() {
+    Text(stringResource(R.string.hello_world),
+        color = Color.Blue,
+        fontSize = 30.sp,
+        fontStyle = FontStyle.Italic,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.width(150.dp))
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TextShadow() {
+    val offset = Offset(5.0f, 10.0f)
+    Text(
+        text = "Hello world!",
+        style = TextStyle(
+            fontSize = 24.sp,
+            shadow = Shadow(
+                color = Color.Blue,
+                offset = offset,
+                blurRadius = 3f
+            )
+        )
+    )
+}
+
+@Composable
+fun DifferentFonts() {
+    Column {
+        Text("Hello World", fontFamily = FontFamily.Serif)
+        Text("Hello World", fontFamily = FontFamily.SansSerif)
+    }
+}
+
+@Composable
+fun MultipleStylesInText() {
+    Text(
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Color.Blue)) {
+                append("H")
+            }
+            append("ello ")
+
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Red)) {
+                append("W")
+            }
+            append("orld")
+        }
+    )
+}
+
+@Composable
+fun ParagraphStyle() {
+    Text(
+        buildAnnotatedString {
+          //  withStyle(style = ParagraphStyle()) {
+                withStyle(style = SpanStyle(color = Color.Blue)) {
+                    append("Hello\n")
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Red
+                    )
+                ) {
+                    append("World\n")
+                }
+                append("Compose")
+            }
+      //  }
+    )
+}
+@Composable
+fun LongText() {
+    Text("hello ".repeat(50), maxLines = 2)
+}
+
+@Composable
+fun OverflowedText() {
+    Text("Hello Compose ".repeat(50), maxLines = 2, overflow = TextOverflow.Ellipsis)
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+fun MultiColorText() {
+    val GradientColors = listOf(Cyan, Yellow, Green)
+    Text(
+        text = "hello this is andoid demio application releted to etx5tt",
+        style = TextStyle(
+            brush = Brush.linearGradient(
+                colors = GradientColors
+            )
+        )
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)
+@Composable
+fun MultiColourEditText(){
+    val GradientColors = listOf(Cyan, Yellow, Green, Black, Purple40, Red)
+    var text by remember { mutableStateOf("") }
+    val brush = remember {
+        Brush.linearGradient(
+            colors = GradientColors
+        )
+    }
+
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        textStyle = TextStyle(brush = brush, fontSize = 20.sp,
+            lineHeight = 2.5.em,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
+            lineHeightStyle = LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Center,
+                trim = LineHeightStyle.Trim.None
+            )
+        )
+    )
+
+
+}
+@Composable
+fun SelectableText() {
+    SelectionContainer {
+        Text("This text is selectable")
+    }
+}
+@Composable
+fun PartiallySelectableText() {
+    SelectionContainer {
+        Column {
+            Text("This text is selectable")
+            Text("This one too")
+            Text("This one as well")
+            DisableSelection {
+                Text("But not this one")
+                Text("Neither this one")
+            }
+            Text("But again, you can select this one")
+            Text("And this one too")
+        }
+    }
+}
+
+@Composable
+fun SimpleClickableText() {
+    ClickableText(
+        text = AnnotatedString("Click Me"),
+        onClick = { offset ->
+            Log.d("ClickableText", "$offset -th character is clicked.")
+        }
+    )
+}
+
+@Composable
+fun AnnotatedClickableText() {
+    val annotatedText = buildAnnotatedString {
+        append("Click ")
+
+        // We attach this *URL* annotation to the following content
+        // until `pop()` is called
+        pushStringAnnotation(tag = "URL",
+            annotation = "https://developer.android.com")
+        withStyle(style = SpanStyle(color = Color.Blue,
+            fontWeight = FontWeight.Bold)) {
+            append("here")
+        }
+
+        pop()
+    }
+
+    ClickableText(
+        text = annotatedText,
+        onClick = { offset ->
+            // We check if there is an *URL* annotation attached to the text
+            // at the clicked position
+            annotatedText.getStringAnnotations(tag = "URL", start = offset,
+                end = offset)
+                .firstOrNull()?.let { annotation ->
+                    // If yes, we log its value
+                    Log.d("Clicked URL", annotation.item)
+                }
+        }
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleFilledTextFieldSample() {
+    var text by remember { mutableStateOf("Hello") }
+
+    TextField(
+        value = text,
+        maxLines = 1,
+        onValueChange = { text = it },
+        label = { Text("Label") }
+    )
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PasswordTextField() {
+    var password by rememberSaveable { mutableStateOf("") }
+    TextField(
+        value = password,
+        onValueChange = { password = it },
+        label = { Text("Enter password") },
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoLeadingZeroes() {
+    /** does not start with 0 key */
+    var input by rememberSaveable { mutableStateOf("") }
+    TextField(
+        value = input,
+        onValueChange = { newText ->
+            input = newText.trimStart { it == '0' }
+        }
+    )
+}
+
+@Composable
+fun Activity.ImageV(){
+
+    val imageBitmap = ImageBitmap.imageResource(R.drawable.logo)
+    val imageLoader = imageLoader
+    AsyncImage(
+        model = "https://cdn.mos.cms.futurecdn.net/uE49BtPU4iDJAoHFEHn8m7-970-80.jpg.webp",
+        contentDescription = "Translated description of what the image contains",
+        imageLoader = imageLoader
+    )
+
+  /*  val request = ImageRequest.Builder(this)
+        .data("https://www.example.com/image.jpg")
+        .build()
+    val drawable = imageLoader.execute(request).drawable*/
+}
+
+@Preview
+@Composable
+fun MaterialIconsSnippets() {
+    // [START android_compose_images_icon_resources]
+    Icon(
+        painter = painterResource(R.drawable.logo),
+        contentDescription = stringResource(id = R.string.app_name)
+    )
+    // [END android_compose_images_icon_resources]
+
+    // [START android_compose_images_icon_prebuilt]
+    Icon(
+        Icons.Rounded.ShoppingCart,
+        contentDescription = stringResource(id = R.string.app_name)
+    )
+    // [END android_compose_images_icon_prebuilt]
+}
