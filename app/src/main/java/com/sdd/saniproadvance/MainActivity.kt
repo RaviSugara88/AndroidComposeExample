@@ -37,3 +37,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+//@Preview(showBackground = true, name = "dashbord", showSystemUi = true, widthDp = 250, heightDp = 250)

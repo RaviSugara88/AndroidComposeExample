@@ -1,7 +1,10 @@
 package com.sdd.saniproadvance.utils
 
 import android.app.Activity
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Build
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
@@ -44,4 +47,23 @@ fun Activity.showSystemUI() {
         }
 */
    // }
+}
+
+fun Activity.checkNetWork(){
+    val connectivityManager = getSystemService(ConnectivityManager::class.java)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback(){
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                Log.d("NETWORK_STATE", "available")
+
+            }
+
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                Log.d("NETWORK_STATE", "lost")
+
+            }
+        })
+    }
 }
