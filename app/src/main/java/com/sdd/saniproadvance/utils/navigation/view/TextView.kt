@@ -1,18 +1,25 @@
 package com.sdd.saniproadvance.utils
 
 import android.app.Activity
+import android.graphics.drawable.Icon
+import android.service.autofill.OnClickAction
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -26,6 +33,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +43,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,10 +79,85 @@ fun SimpleOutlinedTextFieldSample(block:(text:String)->Unit) {
         onValueChange = { text = it },
         label = { Text(stringResource(id = R.string.mobile)) },
         textStyle = TextStyle(color = Black, fontWeight = FontWeight.Normal, fontSize = 16.sp),
-        modifier = Modifier.padding(start = 26.dp, end = 26.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(start = 26.dp, end = 26.dp)
+            .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
     block(text)
+}
+
+/** We can used [CustomOutlinedTextField] for all type text field like [Number,Password,Single Line , MultiLine]*/
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomOutlinedTextField(
+    value:String,
+    onValueChange: (String)->Unit,
+    label:String,
+    leadingIconImageVector: ImageVector,
+    leadingIconDescription:String,
+    isSingleLine:Boolean = false,
+    isPasswordField:Boolean =false,
+    isPasswordVisible:Boolean=false,
+    onVisibilityChange:(Boolean)->Unit,
+    keyBoardOption:KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    showError:Boolean = false,
+    errorMessage:String=""
+
+) {
+    OutlinedTextField(
+        value = value,
+        singleLine = isSingleLine,
+        onValueChange = {onValueChange(it)},
+        modifier = Modifier
+            .padding(start = 26.dp, end = 26.dp)
+            .fillMaxWidth(),
+        label = { Text(label) },
+        leadingIcon ={
+            Icon(
+                imageVector = leadingIconImageVector,
+                contentDescription = leadingIconDescription,
+                tint = if (showError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+            )
+        },
+        isError = showError,
+        trailingIcon ={
+            if (showError && !isPasswordField) Icon(imageVector = Icons.Filled.Warning, contentDescription ="show Error" )
+            if (isPasswordField){
+                IconButton(onClick = {
+                    onVisibilityChange(!isPasswordVisible)
+                }) {
+                    Icon(painter = if (isPasswordVisible) painterResource(id = R.drawable.baseline_visibility_24) else painterResource(id = R.drawable.baseline_visibility_off_24)
+                        , contentDescription = "Toggle password visibility")
+
+
+                }
+            }
+
+        },
+        visualTransformation = when{
+            isPasswordField && isPasswordVisible -> VisualTransformation.None
+            isPasswordField -> PasswordVisualTransformation()
+            else -> VisualTransformation.None
+        },
+        keyboardOptions = keyBoardOption,
+        keyboardActions = keyboardActions,
+        )
+    if (showError){
+        Text(
+            text = errorMessage,
+            color = MaterialTheme.colorScheme.error,
+            style = TextStyle(
+                fontSize = 12.sp
+            ),
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .offset(y = (-8).dp)
+                .fillMaxWidth(0.9f)
+        )
+    }
+
 }
 
 @Composable
@@ -262,12 +346,14 @@ fun PartiallySelectableText() {
 }
 
 @Composable
-fun SimpleClickableText() {
+fun SimpleClickableText(value: String,onClickAction:()->Unit) {
     ClickableText(
-        text = AnnotatedString("Click Me"),
-        onClick = { offset ->
-            Log.d("ClickableText", "$offset -th character is clicked.")
-        }
+        text = AnnotatedString(value),
+        onClick ={onClickAction()},
+        modifier = Modifier.fillMaxWidth(),
+        style = TextStyle(
+            color = Color.Blue,
+        )
     )
 }
 

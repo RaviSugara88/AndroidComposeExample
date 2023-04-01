@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">SaniProAdvance</string>
+    <string name="app_name">Compose Example</string>
     <string name="hello_world">hello_world</string>
-    <string name="enter_your_phone_number">Enter your Phone Number</string>
+    <string name="enter_your_phone_number">Enter your User Id &amp; Password </string>
     <string name="info_otp">We will send you the 4 digit verification code</string>
     <string name="mobile">Mobile</string>
     <string name="send">Send</string>
+    <string name="login">Login</string>
     <string name="verify_your_phone_number">Verify your Phone number</string>
     <string name="enter_your_otp_code_here">Enter your OTP Code here</string>
     <string name="verify">Verify</string>
