@@ -6,10 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sdd.saniproadvance.screen.DashboardScreen
-import com.sdd.saniproadvance.screen.LoginScreen
-import com.sdd.saniproadvance.screen.ReportScreen
-import com.sdd.saniproadvance.screen.SplashScreen
+import com.sdd.saniproadvance.screen.*
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.viewmodel.MainViewModel
 
@@ -40,6 +37,9 @@ fun StartNavigation(context: Activity,mainViewModel: MainViewModel){
 
         composable(NavigationScreen.ReportScreen.route){
             ReportScreen(navController)
+        }
+        composable(NavigationScreen.UserRegistrationScreen.route){
+            UserRegistration(navController)
         }
     }
 }

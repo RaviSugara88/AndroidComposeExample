@@ -16,3 +16,9 @@ A Simple app in jetpack compose , where we can implement Login , Registration an
 <p align="center">
 <img src="screenshot/login.png" height="400">
 </p>
+<p align="center">
+<img src="screenshot/registration.png" height="400">
+</p>
+<p align="center">
+<img src="screenshot/dashboard.png" height="400">
+</p>

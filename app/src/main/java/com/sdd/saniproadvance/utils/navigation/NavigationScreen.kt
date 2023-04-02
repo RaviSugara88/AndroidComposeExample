@@ -9,5 +9,6 @@ sealed class NavigationScreen(val route:String){
         fun createRoute(data:String) = " $data/dashboard"
     }
     object ReportScreen : NavigationScreen("reportscreen")
+    object UserRegistrationScreen :NavigationScreen("registation")
 
 }

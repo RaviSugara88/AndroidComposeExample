@@ -99,7 +99,7 @@ fun CustomOutlinedTextField(
     isSingleLine:Boolean = false,
     isPasswordField:Boolean =false,
     isPasswordVisible:Boolean=false,
-    onVisibilityChange:(Boolean)->Unit,
+    onVisibilityChange:(Boolean)->Unit={false},
     keyBoardOption:KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     showError:Boolean = false,
@@ -108,12 +108,13 @@ fun CustomOutlinedTextField(
 ) {
     OutlinedTextField(
         value = value,
+        textStyle = TextStyle(fontSize = 16.sp, fontFamily = FontFamily.SansSerif),
         singleLine = isSingleLine,
         onValueChange = {onValueChange(it)},
         modifier = Modifier
-            .padding(start = 26.dp, end = 26.dp)
+            .padding(start = 26.dp, end = 26.dp, top = 5.dp, bottom = 5.dp)
             .fillMaxWidth(),
-        label = { Text(label) },
+        label = { Text(label, style = TextStyle(fontSize = 16.sp, fontFamily = FontFamily.Serif), modifier = Modifier.padding(top = 2.dp)) },
         leadingIcon ={
             Icon(
                 imageVector = leadingIconImageVector,
@@ -130,7 +131,6 @@ fun CustomOutlinedTextField(
                 }) {
                     Icon(painter = if (isPasswordVisible) painterResource(id = R.drawable.baseline_visibility_24) else painterResource(id = R.drawable.baseline_visibility_off_24)
                         , contentDescription = "Toggle password visibility")
-
 
                 }
             }

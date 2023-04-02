@@ -84,17 +84,28 @@ fun LoginScreen(navHostController: NavHostController,context: Activity){
                 .align(Alignment.BottomEnd)
                 .padding(end = 28.dp)
                 .clickable {
+
+                    navHostController.navigate(NavigationScreen.UserRegistrationScreen.route){
+                        /**  launchSingleTop =true
+                         * create only on instance in BackStack
+                        like A-B-C-A-B = A-B-C
+                         */
+                       // launchSingleTop = true
+                    }
+
+/*
                     Toast
                         .makeText(context, "Jai Mata di", Toast.LENGTH_LONG)
                         .show()
-                },text = "Register User", style = TextStyle(color = Color.Blue, fontSize = 14.sp),
+*/
+                },text = "Register", style = TextStyle(color = Color.Blue, fontSize = 14.sp),
                 textDecoration = TextDecoration.Underline)
         }
 
 
         MarginsToTop(screenHeight = 10.dp)
         ButtonWithCutCornerShape(stringResource(id = R.string.login)){
-            Toast.makeText(context,mobileNo,Toast.LENGTH_LONG).show()
+          //  Toast.makeText(context,mobileNo,Toast.LENGTH_LONG).show()
             navHostController.navigate(NavigationScreen.DashboardScreen.createRoute("hello this is Dashboard Screen")){
                 /**  launchSingleTop =true
                  * create only on instance in BackStack
