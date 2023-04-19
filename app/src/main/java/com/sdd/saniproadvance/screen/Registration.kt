@@ -8,9 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -40,6 +38,7 @@ import com.sdd.saniproadvance.utils.HeadingText
 import com.sdd.saniproadvance.utils.appIcon
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.ButtonWithCutCornerShape
+import com.sdd.saniproadvance.utils.navigation.view.CustomToolbar
 import com.sdd.saniproadvance.utils.navigation.view.MarginsToTop
 import java.util.regex.Pattern
 
@@ -111,138 +110,178 @@ fun UserRegistration(navHostController: NavHostController){
 
 
 
+    /* @Composable
+fun MyScaffold(@StringRes titleId: Int, upAvailable: Boolean, onUpClicked: () -> Unit, content: @Composable (PaddingValues) -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { MyText(textId = titleId) }, backgroundColor = Color.Black, navigationIcon = {
+                if (upAvailable) {
+                    IconButton(onClick = { onUpClicked() }) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                }
+            })
+        },
+        backgroundColor = Color.Transparent,
+        content = content
+    )
+}*/
+
     Surface() {
+        val materialBlue700= Color(0xFF1976D2)
+        val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-          //  .padding(all = 8.dp)
-            .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
+        Scaffold(
+            topBar = { TopAppBar(title = {Text("Registration")},backgroundColor = materialBlue700, navigationIcon = {
+                IconButton(onClick = {  }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                }
+            })  },
 
-            MarginsToTop(screenHeight = (screenHeight*5/100))
-            appIcon()
-            MarginsToTop(screenHeight = (screenHeight*2/100))
-            HeadingText(text = stringResource(R.string.enter_your_detail))
-            //  SimpleText(text = stringResource(R.string.info_otp))
-            MarginsToTop(screenHeight = 16.dp)
+        ) { contentPadding ->
+            // Screen content
+           // Box(modifier = Modifier.padding(contentPadding)) { /* ... */ }
 
-            CustomOutlinedTextField(
-                value = name,
-                onValueChange = {name=it},
-                label = "Name",
-                showError = !validateName,
-                errorMessage = validateNameError,
-                leadingIconImageVector = Icons.Default.Person,
-                leadingIconDescription = "na",
-                keyBoardOption = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {focusManager.moveFocus(FocusDirection.Down)}
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(contentPadding)
+                .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                CustomToolbar(title = "Registration") {
+                    navHostController.popBackStack()
+                }
+
+                MarginsToTop(screenHeight = (screenHeight*5/100))
+                appIcon()
+                MarginsToTop(screenHeight = (screenHeight*2/100))
+                HeadingText(text = stringResource(R.string.enter_your_detail))
+                //  SimpleText(text = stringResource(R.string.info_otp))
+                MarginsToTop(screenHeight = 16.dp)
+
+                CustomOutlinedTextField(
+                    value = name,
+                    onValueChange = {name=it},
+                    label = "Name",
+                    showError = !validateName,
+                    errorMessage = validateNameError,
+                    leadingIconImageVector = Icons.Default.Person,
+                    leadingIconDescription = "na",
+                    keyBoardOption = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {focusManager.moveFocus(FocusDirection.Down)}
+                    )
                 )
-            )
-            CustomOutlinedTextField(
-                value = email,
-                onValueChange = {email=it},
-                label = "EmailAddress",
-                showError = !validateEmail,
-                errorMessage = validateEmailError,
-                leadingIconImageVector = Icons.Default.Email,
-                leadingIconDescription = "na",
-                keyBoardOption = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {focusManager.moveFocus(FocusDirection.Down)}
+                CustomOutlinedTextField(
+                    value = email,
+                    onValueChange = {email=it},
+                    label = "EmailAddress",
+                    showError = !validateEmail,
+                    errorMessage = validateEmailError,
+                    leadingIconImageVector = Icons.Default.Email,
+                    leadingIconDescription = "na",
+                    keyBoardOption = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {focusManager.moveFocus(FocusDirection.Down)}
+                    )
                 )
-            )
-            CustomOutlinedTextField(
-                value = phoneNo,
-                onValueChange = {phoneNo=it},
-                label = "Phone Number",
-                showError = !validatePhoneNo,
-                errorMessage = validatePhoneNoError,
-                leadingIconImageVector = Icons.Default.Phone,
-                leadingIconDescription = "na",
-                keyBoardOption = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {focusManager.moveFocus(FocusDirection.Down)}
-                ),
-            )
-            CustomOutlinedTextField(
-                value = address,
-                onValueChange = {address=it},
-                label = "Address",
-                leadingIconImageVector = Icons.Default.Home,
-                leadingIconDescription = "na",
-                keyBoardOption = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                   // onNext = {focusManager.moveFocus(FocusDirection.Down)}
-                ),
-            )
-            CustomOutlinedTextField(
-                value = password,
-                onValueChange = {password=it},
-                label = "Password",
-                leadingIconImageVector = Icons.Default.Lock,
-                leadingIconDescription = "na",
-                showError = !validatePassword,
-                errorMessage = validatePasswordError,
-                isPasswordField = true,
-                isPasswordVisible = isPasswordVisible,
-                onVisibilityChange ={isPasswordVisible=it},
-                keyBoardOption = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {focusManager.clearFocus()}
-                ),
+                CustomOutlinedTextField(
+                    value = phoneNo,
+                    onValueChange = {phoneNo=it},
+                    textLength = 10,
+                    label = "Phone Number",
+                    showError = !validatePhoneNo,
+                    errorMessage = validatePhoneNoError,
+                    leadingIconImageVector = Icons.Default.Phone,
+                    leadingIconDescription = "na",
+                    keyBoardOption = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {focusManager.moveFocus(FocusDirection.Down)}
+                    ),
+                )
+                CustomOutlinedTextField(
+                    value = address,
+                    onValueChange = {address=it},
+                    label = "Address",
+                    leadingIconImageVector = Icons.Default.Home,
+                    leadingIconDescription = "na",
+                    keyBoardOption = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        // onNext = {focusManager.moveFocus(FocusDirection.Down)}
+                    ),
+                )
+                CustomOutlinedTextField(
+                    value = password,
+                    onValueChange = {password=it},
+                    label = "Password",
+                    leadingIconImageVector = Icons.Default.Lock,
+                    leadingIconDescription = "na",
+                    showError = !validatePassword,
+                    errorMessage = validatePasswordError,
+                    isPasswordField = true,
+                    isPasswordVisible = isPasswordVisible,
+                    onVisibilityChange ={isPasswordVisible=it},
+                    keyBoardOption = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {focusManager.clearFocus()}
+                    ),
 
-            )
+                    )
 
-            MarginsToTop(screenHeight = 10.dp)
-            ButtonWithCutCornerShape(stringResource(id = R.string.register)){
-                register(name,email,phoneNo,password,address)
+                MarginsToTop(screenHeight = 10.dp)
+                ButtonWithCutCornerShape(stringResource(id = R.string.register)){
+                    register(name,email,phoneNo,password,address)
+                }
+
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Text(modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 28.dp)
+                        .clickable {
+
+                            navHostController.navigate(NavigationScreen.LoginScreen.route) {
+                                /**  launchSingleTop =true
+                                 * create only on instance in BackStack
+                                like A-B-C-A-B = A-B-C
+                                 */
+                                /**  launchSingleTop =true
+                                 * create only on instance in BackStack
+                                like A-B-C-A-B = A-B-C
+                                 */
+
+                                launchSingleTop = true
+                            }
+
+                        },text = "Login", style = TextStyle(color = Color.Blue, fontSize = 14.sp),
+                        textDecoration = TextDecoration.Underline)
+                }
+
+
+
+
             }
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Text(modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 28.dp)
-                    .clickable {
-
-                        navHostController.navigate(NavigationScreen.LoginScreen.route){
-                            /**  launchSingleTop =true
-                             * create only on instance in BackStack
-                            like A-B-C-A-B = A-B-C
-                             */
-                            /**  launchSingleTop =true
-                             * create only on instance in BackStack
-                            like A-B-C-A-B = A-B-C
-                             */
-
-                             launchSingleTop = true
-                        }
-
-                    },text = "Login", style = TextStyle(color = Color.Blue, fontSize = 14.sp),
-                    textDecoration = TextDecoration.Underline)
-            }
-
-
-
 
         }
 
+
     }
+
+
+
 }

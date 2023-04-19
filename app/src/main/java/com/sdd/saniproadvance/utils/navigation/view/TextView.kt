@@ -103,14 +103,23 @@ fun CustomOutlinedTextField(
     keyBoardOption:KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     showError:Boolean = false,
-    errorMessage:String=""
+    errorMessage:String="",
+    textLength:Int = 0
+
 
 ) {
     OutlinedTextField(
         value = value,
         textStyle = TextStyle(fontSize = 16.sp, fontFamily = FontFamily.SansSerif),
         singleLine = isSingleLine,
-        onValueChange = {onValueChange(it)},
+        onValueChange = {
+        if (textLength>0){
+            if (it.length <= textLength){
+                onValueChange(it)
+            }
+        }else{
+            onValueChange(it)
+        } },
         modifier = Modifier
             .padding(start = 26.dp, end = 26.dp, top = 5.dp, bottom = 5.dp)
             .fillMaxWidth(),

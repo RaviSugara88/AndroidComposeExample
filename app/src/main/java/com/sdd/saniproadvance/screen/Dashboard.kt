@@ -5,10 +5,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.TextView
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.TestActivity
 import com.sdd.saniproadvance.retrofit.util.ApiState
@@ -21,7 +24,14 @@ import com.sdd.saniproadvance.viewmodel.MainViewModel
 @Composable
 fun DashboardScreen(navHostController: NavHostController,context: Activity,data:String,mainViewModel: MainViewModel){
     /** Api call through Retrofit*/
-    GETData(mainViewModel = mainViewModel)
+    Column(Modifier.fillMaxWidth()) {
+        CustomToolbar(title = "Dashboard", isBackButtonVisible = false) {
+
+        }
+        GETData(mainViewModel = mainViewModel)
+    }
+
+
 /*
     Button(onClick = {
        val intent = Intent(context,TestActivity::class.java)
