@@ -132,11 +132,11 @@ fun MyScaffold(@StringRes titleId: Int, upAvailable: Boolean, onUpClicked: () ->
         val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
 
         Scaffold(
-            topBar = { TopAppBar(title = {Text("Registration")},backgroundColor = materialBlue700, navigationIcon = {
+/*            topBar = { TopAppBar(title = {Text("Registration")},backgroundColor = materialBlue700, navigationIcon = {
                 IconButton(onClick = {  }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                 }
-            })  },
+            })  }*/
 
         ) { contentPadding ->
             // Screen content
