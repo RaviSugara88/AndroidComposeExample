@@ -1,21 +1,20 @@
 package com.sdd.saniproadvance.navigation
 
 import android.app.Activity
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sdd.saniproadvance.screen.*
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
-import com.sdd.saniproadvance.viewmodel.MainViewModel
+import com.sdd.saniproadvance.viewmodel.UserViewModel
 
 /*
 class Navigation {
 }*/
 
 @Composable
-fun StartNavigation(context: Activity,mainViewModel: MainViewModel){
+fun StartNavigation(context: Activity,mainViewModel: UserViewModel){
     val navController = rememberNavController()
     
     NavHost(navController = navController ,
@@ -26,7 +25,7 @@ fun StartNavigation(context: Activity,mainViewModel: MainViewModel){
         }
 
         composable(NavigationScreen.LoginScreen.route){
-            LoginScreen(navController,context)
+            LoginScreen(navController,context,mainViewModel)
         }
 
         composable(NavigationScreen.DashboardScreen.route){
@@ -39,7 +38,7 @@ fun StartNavigation(context: Activity,mainViewModel: MainViewModel){
             ReportScreen(navController)
         }
         composable(NavigationScreen.UserRegistrationScreen.route){
-            UserRegistration(navController)
+            UserRegistration(navController,context,mainViewModel)
         }
     }
 }

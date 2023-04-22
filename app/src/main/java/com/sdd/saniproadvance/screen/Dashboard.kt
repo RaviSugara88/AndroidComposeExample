@@ -19,10 +19,11 @@ import com.sdd.saniproadvance.utils.dummyData
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.*
 import com.sdd.saniproadvance.viewmodel.MainViewModel
+import com.sdd.saniproadvance.viewmodel.UserViewModel
 
 
 @Composable
-fun DashboardScreen(navHostController: NavHostController,context: Activity,data:String,mainViewModel: MainViewModel){
+fun DashboardScreen(navHostController: NavHostController,context: Activity,data:String,mainViewModel: UserViewModel){
     /** Api call through Retrofit*/
     Column(Modifier.fillMaxWidth()) {
         CustomToolbar(title = "Dashboard", isBackButtonVisible = false) {
@@ -70,7 +71,7 @@ fun DashboardScreen(navHostController: NavHostController,context: Activity,data:
 //alt+1 =Project stacture
 
 @Composable
-fun GETData(mainViewModel: MainViewModel){
+fun GETData(mainViewModel: UserViewModel){
     when(val result = mainViewModel.response.value){
         is ApiState.Success->{
             LazyColumn{

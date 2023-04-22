@@ -6,6 +6,7 @@ import android.service.autofill.OnClickAction
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -168,6 +169,40 @@ fun CustomOutlinedTextField(
     }
 
 }
+
+
+
+/** Simple text field just like Android XML */
+
+
+@Composable
+fun CustomMultilineSimpleTextField(
+    value : String,
+    onValueChange : (String) ->Unit,
+    modifier: Modifier = Modifier,
+    hintText: String,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    maxLine : Int =4
+){
+
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = textStyle,
+        maxLines = maxLine,
+        decorationBox = {innerTextField ->
+            Box(modifier = modifier) {
+                if (value.isEmpty()){
+                    Text(text = hintText,
+                        color = Color.Blue)
+                }
+                innerTextField()
+            }
+        }
+
+    )
+}
+
 
 @Composable
 fun HeadingText(text: String){

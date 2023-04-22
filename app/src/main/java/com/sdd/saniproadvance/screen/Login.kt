@@ -1,9 +1,13 @@
 package com.sdd.saniproadvance.screen
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.widget.Toast
+import android.util.Log
+import android.util.Patterns
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -11,33 +15,94 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
 import com.sdd.saniproadvance.utils.*
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.ButtonWithCutCornerShape
 import com.sdd.saniproadvance.utils.navigation.view.MarginsToTop
+import com.sdd.saniproadvance.viewmodel.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun LoginScreen(navHostController: NavHostController,context: Activity){
+fun LoginScreen(
+    navHostController: NavHostController,
+    context2: Activity,
+    mainViewModel: UserViewModel = viewModel()
+){
     val configuration = LocalConfiguration.current
-    var mobileNo by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable {
         mutableStateOf("")
     }
     val screenHeight = configuration.screenHeightDp.dp
     val context = LocalContext.current
-   // val screenWidth = configuration.screenWidthDp.dp
+    val focusManager = LocalFocusManager.current
+
+
+    var validatePassword by rememberSaveable { mutableStateOf(true) }
+    var isPasswordVisible by rememberSaveable { mutableStateOf(false)}
+
+    var validateEmailError by rememberSaveable { mutableStateOf("The format of the email doesn't seem right") }
+
+    var validatePasswordError by rememberSaveable { mutableStateOf("Enter password") }
+    var validateEmail by rememberSaveable { mutableStateOf(true) }
+    fun validateData(email: String, password: String):Boolean{
+        val passwordRegex = "(?=.*[@#\$%^&+=])".toRegex()//"(?=.*\\d)(?=.*[a-z](?=.*[@#$%^&*+=]).{8,})".toRegex()
+        // validateName = name.isNotBlank()
+        validateEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+        return if (email.isEmpty()){
+            validateEmail = false
+            validateEmailError = "Please enter email"
+            false
+        }else if (!validateEmail){
+            validateEmail = false
+            validateEmailError = "The format of the email doesn't seem right"
+            false
+        }else if (password.isEmpty()){
+            validatePassword = false
+            validatePasswordError = "Please enter password"
+            false
+
+        }else{
+            true
+        }
+        // validatePhoneNo = Patterns.PHONE.matcher(phoneNo).matches()
+        // validatePassword = passwordRegex.matches(password)
+
+      //  return validateEmail
+    }
+
+   // val gameUiState by mainViewModel.userLoginRes.collectAsState()
+
+
+
+
+
+
+    // val screenWidth = configuration.screenWidthDp.dp
    // val hh = c
+
+    //2	2	Pawan	pawan@yopmail.com	12345678	5869365214	thff
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
@@ -53,29 +118,45 @@ fun LoginScreen(navHostController: NavHostController,context: Activity){
             mobileNo = it
         }
 */
+
         Spacer(modifier = Modifier.height(5.dp))
         CustomOutlinedTextField(
-            value = password,
-            onValueChange ={password = it} ,
-            label = "User Name",
-            leadingIconImageVector =Icons.Default.Person ,
-            leadingIconDescription ="dfdssdf" ,
-            onVisibilityChange ={} ,
-            isPasswordField = false,
-            isSingleLine = true
-
+            value = email,
+            onValueChange = {email=it},
+            label = "Email",
+            showError = !validateEmail,
+            errorMessage = validateEmailError,
+            leadingIconImageVector = Icons.Default.Email,
+            leadingIconDescription = "na",
+            keyBoardOption = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {focusManager.moveFocus(FocusDirection.Down)}
+            )
         )
         MarginsToTop(screenHeight = 10.dp)
         CustomOutlinedTextField(
             value = password,
-            onValueChange ={password = it} ,
+            onValueChange = {password=it},
             label = "Password",
-            leadingIconImageVector =Icons.Default.Lock ,
-            leadingIconDescription ="dfdssdf" ,
-            onVisibilityChange ={} ,
+            leadingIconImageVector = Icons.Default.Lock,
+            leadingIconDescription = "na",
+            showError = !validatePassword,
+            errorMessage = validatePasswordError,
             isPasswordField = true,
-            isSingleLine = true
-        )
+            isPasswordVisible = isPasswordVisible,
+            onVisibilityChange ={isPasswordVisible=it},
+            keyBoardOption = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            ),
+
+            )
 
        MarginsToTop(10.dp)
 
@@ -85,12 +166,12 @@ fun LoginScreen(navHostController: NavHostController,context: Activity){
                 .padding(end = 28.dp)
                 .clickable {
 
-                    navHostController.navigate(NavigationScreen.UserRegistrationScreen.route){
+                    navHostController.navigate(NavigationScreen.UserRegistrationScreen.route) {
                         /**  launchSingleTop =true
                          * create only on instance in BackStack
                         like A-B-C-A-B = A-B-C
                          */
-                       // launchSingleTop = true
+                        // launchSingleTop = true
                     }
 
 /*
@@ -105,15 +186,29 @@ fun LoginScreen(navHostController: NavHostController,context: Activity){
 
         MarginsToTop(screenHeight = 10.dp)
         ButtonWithCutCornerShape(stringResource(id = R.string.login)){
-          //  Toast.makeText(context,mobileNo,Toast.LENGTH_LONG).show()
-            navHostController.navigate(NavigationScreen.DashboardScreen.createRoute("hello this is Dashboard Screen")){
-                /**  launchSingleTop =true
-                 * create only on instance in BackStack
-                like A-B-C-A-B = A-B-C
-                 */
-                launchSingleTop = true
-            }
+            if (validateData(email,password)){
+                CoroutineScope(Dispatchers.Main).launch {
+                    val data =   mainViewModel.userRepository.loginUser(email)
+                    if (data!=null){
+                        validateEmail = true
+                        validatePassword = true
 
+                        if (data.password.equals(password,true)){
+                            navigateToDashboardScreen(navHostController)
+                        }else{
+                            validatePassword = false
+                            validatePasswordError = "Invalided password"
+                        }
+
+                    }else{
+                        validateEmail = false
+                        validateEmailError ="Invalided email"
+                    }
+
+                    Log.e("TAG", "LoginScreen: ${data?.name}" )
+                }
+
+            }
         }
         
 
@@ -128,6 +223,15 @@ fun LoginScreen(navHostController: NavHostController,context: Activity){
         }
          */
         //  context.showSystemUI()
+    }
+
+
+
+}
+
+ fun navigateToDashboardScreen(navHostController: NavHostController) {
+    navHostController.navigate(NavigationScreen.DashboardScreen.createRoute("hello this is Dashboard Screen")){
+        launchSingleTop =true
     }
 
 }

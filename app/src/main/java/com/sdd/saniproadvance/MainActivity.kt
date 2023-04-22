@@ -14,13 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sdd.saniproadvance.navigation.StartNavigation
 import com.sdd.saniproadvance.ui.theme.SaniProAdvanceTheme
 import com.sdd.saniproadvance.viewmodel.MainViewModel
+import com.sdd.saniproadvance.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 //https://www.youtube.com/watch?v=o3omhZspWJw
 @AndroidEntryPoint
 
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: UserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,6 +32,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     StartNavigation(this,mainViewModel)
+
+                    mainViewModel.userDetailRes.observe(this){
+
+                    }
                  //   Greeting("Android")
                 }
             }

@@ -1,5 +1,6 @@
 package com.sdd.saniproadvance.screen
 
+import android.app.Activity
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -28,11 +29,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
+import com.sdd.saniproadvance.room_db.model.UserData
 import com.sdd.saniproadvance.utils.CustomOutlinedTextField
 import com.sdd.saniproadvance.utils.HeadingText
 import com.sdd.saniproadvance.utils.appIcon
@@ -40,13 +41,21 @@ import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.ButtonWithCutCornerShape
 import com.sdd.saniproadvance.utils.navigation.view.CustomToolbar
 import com.sdd.saniproadvance.utils.navigation.view.MarginsToTop
-import java.util.regex.Pattern
+import com.sdd.saniproadvance.viewmodel.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 //@Preview
 @Composable
 
-fun UserRegistration(navHostController: NavHostController){
+fun UserRegistration(
+    navHostController: NavHostController,
+    context: Activity,
+    mainViewModel: UserViewModel
+){
 
 
     val context = LocalContext.current
@@ -94,13 +103,27 @@ fun UserRegistration(navHostController: NavHostController){
         address:String
     ){
         if (validateData(name,email,phone,password)){
+
+            mainViewModel.addUser(UserData(name=name, email = email, phoneNo = phoneNo, password = password, address = address))
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(context,"User register successfully ",Toast.LENGTH_LONG).show()
+                delay(2000)
+                navigateToLogin(navHostController)
+            }
+
+
+
+/*
             navHostController.navigate(NavigationScreen.DashboardScreen.createRoute("hello this is Dashboard Screen")){
-                /**  launchSingleTop =true
+                */
+/**  launchSingleTop =true
                  * create only on instance in BackStack
                 like A-B-C-A-B = A-B-C
-                 */
+                 *//*
+
                 launchSingleTop = true
             }
+*/
 
             //print toast
         }else{
@@ -179,7 +202,7 @@ fun MyScaffold(@StringRes titleId: Int, upAvailable: Boolean, onUpClicked: () ->
                 CustomOutlinedTextField(
                     value = email,
                     onValueChange = {email=it},
-                    label = "EmailAddress",
+                    label = "Email",
                     showError = !validateEmail,
                     errorMessage = validateEmailError,
                     leadingIconImageVector = Icons.Default.Email,
@@ -254,19 +277,8 @@ fun MyScaffold(@StringRes titleId: Int, upAvailable: Boolean, onUpClicked: () ->
                         .align(Alignment.BottomEnd)
                         .padding(end = 28.dp)
                         .clickable {
+                                   navigateToLogin(navHostController)
 
-                            navHostController.navigate(NavigationScreen.LoginScreen.route) {
-                                /**  launchSingleTop =true
-                                 * create only on instance in BackStack
-                                like A-B-C-A-B = A-B-C
-                                 */
-                                /**  launchSingleTop =true
-                                 * create only on instance in BackStack
-                                like A-B-C-A-B = A-B-C
-                                 */
-
-                                launchSingleTop = true
-                            }
 
                         },text = "Login", style = TextStyle(color = Color.Blue, fontSize = 14.sp),
                         textDecoration = TextDecoration.Underline)
@@ -283,5 +295,21 @@ fun MyScaffold(@StringRes titleId: Int, upAvailable: Boolean, onUpClicked: () ->
     }
 
 
+
+}
+
+fun navigateToLogin(navHostController: NavHostController) {
+    navHostController.navigate(NavigationScreen.LoginScreen.route) {
+        /**  launchSingleTop =true
+         * create only on instance in BackStack
+        like A-B-C-A-B = A-B-C
+         */
+        /**  launchSingleTop =true
+         * create only on instance in BackStack
+        like A-B-C-A-B = A-B-C
+         */
+
+        launchSingleTop = true
+    }
 
 }
