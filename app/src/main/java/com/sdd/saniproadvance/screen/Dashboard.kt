@@ -5,13 +5,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.TextView
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.TestActivity
 import com.sdd.saniproadvance.retrofit.util.ApiState
@@ -29,6 +36,23 @@ fun DashboardScreen(navHostController: NavHostController,context: Activity,data:
         CustomToolbar(title = "Dashboard", isBackButtonVisible = false) {
 
         }
+        val lifecycleOwner = LocalLifecycleOwner.current
+
+        DisposableEffect(key1 = lifecycleOwner ){
+            val observer = LifecycleEventObserver{_,event ->
+
+             //   if (event== Lifecycle.Event.ON_PAUSE){
+                    mainViewModel.getPost()
+             //   }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+
+        }
+
         GETData(mainViewModel = mainViewModel)
     }
 
@@ -84,7 +108,14 @@ fun GETData(mainViewModel: UserViewModel){
             androidx.compose.material.Text(text = "${result.msg}")
         }
         ApiState.Loading->{
-            androidx.compose.material.CircularProgressIndicator()
+
+            Box(contentAlignment = Alignment.Center,modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+                ){
+                androidx.compose.material.CircularProgressIndicator()
+            }
+
         }
         ApiState.Empty->{
 

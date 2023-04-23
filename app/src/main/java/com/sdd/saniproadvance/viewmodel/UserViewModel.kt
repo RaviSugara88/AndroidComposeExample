@@ -1,9 +1,13 @@
 package com.sdd.saniproadvance.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sdd.saniproadvance.repo.MainRepository
 import com.sdd.saniproadvance.repo.UserRepository
+import com.sdd.saniproadvance.retrofit.util.ApiState
+import com.sdd.saniproadvance.retrofit.util.UserState
 import com.sdd.saniproadvance.room_db.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +22,7 @@ class UserViewModel
     @Inject constructor( val userRepository: UserRepository, mainRepository: MainRepository)
     :MainViewModel(mainRepository) {
 
-  //   val userLoginRes = MutableLiveData<UserData?>()
+     val userLoginRes = MutableLiveData<UserData?>()
      val userDetailRes = MutableLiveData<UserData?>()
 
     // Game UI state
@@ -27,7 +31,7 @@ class UserViewModel
 
     //  private val _uiState = MutableStateFlow(UserData())
 
-     var userLoginRes: MutableSet<UserData> = mutableSetOf()
+    // var userLoginRes: MutableState<UserState> = mutableStateOf(UserState.Empty)
 
     fun addUser(userData: UserData){
             viewModelScope.launch {
@@ -37,7 +41,9 @@ class UserViewModel
 
     fun userLogin(email:String){
         viewModelScope.launch {
-            userRepository.loginUser(email)?.let { userLoginRes.add(it) }
+           // userRepository.loginUser(email)?.let { userLoginRes.value = UserState.Success(it) }
+            userLoginRes.postValue(userRepository.loginUser(email))
+
         }
     }
 

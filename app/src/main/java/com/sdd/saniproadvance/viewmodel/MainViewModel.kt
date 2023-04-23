@@ -19,11 +19,6 @@ open class MainViewModel
 constructor(private val mainRepository: MainRepository) : ViewModel() {
 
     val response:MutableState<ApiState> = mutableStateOf(ApiState.Empty)
-
-    init {
-        getPost()
-    }
-
     fun getPost() = viewModelScope.launch {
         mainRepository.getPost()
             .onStart {

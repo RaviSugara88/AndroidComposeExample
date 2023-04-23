@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -27,6 +29,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
@@ -49,6 +53,7 @@ fun LoginScreen(
     mainViewModel: UserViewModel = viewModel()
 ){
     val configuration = LocalConfiguration.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable {
         mutableStateOf("")
@@ -65,6 +70,44 @@ fun LoginScreen(
 
     var validatePasswordError by rememberSaveable { mutableStateOf("Enter password") }
     var validateEmail by rememberSaveable { mutableStateOf(true) }
+
+
+    DisposableEffect(key1 = lifecycleOwner ){
+        val observer = LifecycleEventObserver{_,event ->
+
+          /** Wee can used Android lifecycle in side [DisposableEffect]
+          if (event==Lifecycle.Event.ON_CREATE){
+                println("ON_CREATE")
+            }*/
+
+
+            mainViewModel.userLoginRes.observe(lifecycleOwner){data->
+                if (data!=null){
+                    validateEmail = true
+                    validatePassword = true
+
+                    if (data?.password.equals(password,true)){
+                        navigateToDashboardScreen(navHostController)
+                    }else{
+                        validatePassword = false
+                        validatePasswordError = "Invalided password"
+                    }
+
+                }else{
+                    validateEmail = false
+                    validateEmailError ="Invalided email"
+                }
+
+            }
+
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+
+    }
     fun validateData(email: String, password: String):Boolean{
         val passwordRegex = "(?=.*[@#\$%^&+=])".toRegex()//"(?=.*\\d)(?=.*[a-z](?=.*[@#$%^&*+=]).{8,})".toRegex()
         // validateName = name.isNotBlank()
@@ -92,9 +135,14 @@ fun LoginScreen(
       //  return validateEmail
     }
 
+    /** also collect data like this*/
    // val gameUiState by mainViewModel.userLoginRes.collectAsState()
 
 
+    //    val searchResults by viewModel.searchResults.observeAsState(listOf())
+    //
+
+ //   val data by mainViewModel.userLoginRes.observeAsState()
 
 
 
@@ -188,12 +236,14 @@ fun LoginScreen(
         ButtonWithCutCornerShape(stringResource(id = R.string.login)){
             if (validateData(email,password)){
                 CoroutineScope(Dispatchers.Main).launch {
-                    val data =   mainViewModel.userRepository.loginUser(email)
+                    mainViewModel.userLogin(email)
+                 //   val data =   mainViewModel.userRepository.loginUser(email)
+/*
                     if (data!=null){
                         validateEmail = true
                         validatePassword = true
 
-                        if (data.password.equals(password,true)){
+                        if (data?.password.equals(password,true)){
                             navigateToDashboardScreen(navHostController)
                         }else{
                             validatePassword = false
@@ -204,8 +254,9 @@ fun LoginScreen(
                         validateEmail = false
                         validateEmailError ="Invalided email"
                     }
+*/
 
-                    Log.e("TAG", "LoginScreen: ${data?.name}" )
+                   // Log.e("TAG", "LoginScreen: ${data?.name}" )
                 }
 
             }
