@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -217,14 +218,16 @@ fun HeadingText(text: String){
 
 }
 @Composable
-fun SimpleText(text: String){
-    Text(text =text,
+fun SimpleText(des:String,text: String,lineHeight:TextUnit){
+    Text(text ="$des\n$text",
         modifier =Modifier.padding(start = 16.dp, end = 16.dp),
         style = TextStyle(
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
             color = Gray,
-            ) )
+            lineHeight = lineHeight
+            )
+    )
 
 }
 @Composable

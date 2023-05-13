@@ -5,11 +5,10 @@ A Simple app in jetpack compose , where we can implement Login , Registration an
 ### Tech Stack
 
 `Jetpack Compose`
-`Retrofit and ktor`
+`Retrofit`
+`Room Database`
 `Dagger Hilt`
 `Coroutines and Flow`
-`State Flow and Shared Flow`
-`Backend in Django`
 `Navigation Architecture`
 `CICD Pipeline using CircleCI`
 

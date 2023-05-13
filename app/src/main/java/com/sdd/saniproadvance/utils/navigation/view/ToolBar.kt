@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +24,7 @@ import com.sdd.saniproadvance.ui.theme.Purple80
 
 //@Preview
 @Composable
-fun CustomToolbar(title:String,isBackButtonVisible:Boolean=true,onClickAction: ()->Unit){
+fun CustomToolbar(title:String,isBackButtonVisible:Boolean=true,showProfile:Boolean=false,onClickAction: (type:Int)->Unit){
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(45.dp)
@@ -41,7 +42,19 @@ fun CustomToolbar(title:String,isBackButtonVisible:Boolean=true,onClickAction: (
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = 10.dp)
-                        .clickable {onClickAction() },
+                        .clickable {onClickAction(0) },
+                )
+            }
+            if (showProfile){
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 10.dp)
+                        .clickable {onClickAction(1) }
+                    ,
                 )
             }
             Text(

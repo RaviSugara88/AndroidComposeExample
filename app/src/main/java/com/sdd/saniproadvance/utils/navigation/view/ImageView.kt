@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.sdd.saniproadvance.R
 
 @Preview
@@ -151,6 +152,8 @@ fun ImageRainbowBorder() {
     }
     val borderWidth = 4.dp
     Image(
+
+
         painter = painterResource(id = R.drawable.logo),
         contentDescription = stringResource(id = R.string.app_name),
         contentScale = ContentScale.Fit,
@@ -164,6 +167,22 @@ fun ImageRainbowBorder() {
             .clip(CircleShape)
     )
     // [END android_compose_image_rainbow_border]
+}
+
+@Composable
+@Preview
+fun CircleShapeImage(uri:String=""){
+    Image(
+        painter = painterResource(id = R.drawable.logo),
+        contentDescription = stringResource(id = R.string.app_name),
+        contentScale = ContentScale.Fit,
+        modifier = Modifier
+            .size(100.dp)
+            .border(BorderStroke(2.dp, Color.White), CircleShape)
+            .clip(CircleShape)
+            .padding(8.dp)
+    )
+
 }
 
 @Composable

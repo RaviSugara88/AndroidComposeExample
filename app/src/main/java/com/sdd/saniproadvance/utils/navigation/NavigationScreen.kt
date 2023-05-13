@@ -11,4 +11,6 @@ sealed class NavigationScreen(val route:String){
     object ReportScreen : NavigationScreen("reportscreen")
     object UserRegistrationScreen :NavigationScreen("registation")
 
+    object UserProfileView :NavigationScreen("profile")
+
 }

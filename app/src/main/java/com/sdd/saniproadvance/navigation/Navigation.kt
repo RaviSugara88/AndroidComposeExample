@@ -37,8 +37,13 @@ fun StartNavigation(context: Activity,mainViewModel: UserViewModel){
         composable(NavigationScreen.ReportScreen.route){
             ReportScreen(navController)
         }
+
         composable(NavigationScreen.UserRegistrationScreen.route){
             UserRegistration(navController,context,mainViewModel)
+        }
+
+        composable(NavigationScreen.UserProfileView.route){
+            UserProfileView(navController,mainViewModel)
         }
     }
 }
