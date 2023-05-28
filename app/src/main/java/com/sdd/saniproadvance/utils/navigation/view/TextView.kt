@@ -230,6 +230,15 @@ fun SimpleText(des:String,text: String,lineHeight:TextUnit){
     )
 
 }
+
+@Composable
+fun SimpleText(des:String,text: String,textStyle: TextStyle){
+    Text(text ="$des\n$text",
+        modifier =Modifier.padding(start = 16.dp, end = 16.dp),
+        style =textStyle
+    )
+
+}
 @Composable
 fun ButtonText(text: String){
     Text(text =text,

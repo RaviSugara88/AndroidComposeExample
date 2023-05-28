@@ -33,6 +33,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +43,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
 import com.sdd.saniproadvance.utils.SimpleText
+import com.sdd.saniproadvance.utils.dialog.AlertDialogComponent
+import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.CircleShapeImage
 import com.sdd.saniproadvance.utils.navigation.view.ImageRainbowBorder
 import com.sdd.saniproadvance.viewmodel.UserViewModel
@@ -59,6 +64,7 @@ fun UserProfileView(
     var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var phone by rememberSaveable { mutableStateOf("") }
+    var dialogState by rememberSaveable { mutableStateOf(false) }
     // var email by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(key1 = "test") {
@@ -79,6 +85,22 @@ fun UserProfileView(
     }
 
 
+    if (dialogState)
+        AlertDialogComponent { st ->
+            if (st) {
+                dialogState = false
+                navHostController.navigate(NavigationScreen.LoginScreen.route) {
+                    launchSingleTop = true
+                    //inclusive = true
+                    popUpTo(NavigationScreen.UserProfileView.route) {
+                        inclusive = true
+                    }
+                }
+            } else {
+                dialogState = false
+            }
+        }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -98,16 +120,31 @@ fun UserProfileView(
             )
         ) {
 
-            Box() {
+            Box(Modifier.fillMaxWidth()) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "",
                     tint = Color.Black,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
-                        .padding(start = 12.dp, top = 12.dp)
+                        .padding(start = 16.dp, top = 16.dp)
                         .clickable {
                             navHostController.popBackStack()
+                        },
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_logout_24),
+                    contentDescription = "",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp, top = 16.dp)
+                        .clickable {
+                            scope.launch {
+                                //  AlertDialogComponent()
+                                dialogState = true
+                            }
+                            //  navHostController.navigate(Navi)
                         },
                 )
 
@@ -133,11 +170,28 @@ fun UserProfileView(
             }
 
 
-            SimpleText(des = "User name", text = name, 20.sp)
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleText(des = "Email", text = email, 20.sp)
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleText(des = "Mobile No", text = phone, 20.sp)
+            SimpleText(des = "User name", text = name,
+                textStyle =  TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray,
+                    lineHeight = 20.sp
+                ),
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            SimpleText(des = "Email", text = email,  textStyle =  TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
+                lineHeight = 20.sp
+            ),)
+            Spacer(modifier = Modifier.height(10.dp))
+            SimpleText(des = "Mobile No", text = phone,  textStyle =  TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
+                lineHeight = 20.sp
+            ),)
 
 
         }
