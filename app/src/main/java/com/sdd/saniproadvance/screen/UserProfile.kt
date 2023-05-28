@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
 import com.sdd.saniproadvance.utils.SimpleText
+import com.sdd.saniproadvance.utils.data_store.StoreData
 import com.sdd.saniproadvance.utils.dialog.AlertDialogComponent
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.CircleShapeImage
@@ -66,7 +67,7 @@ fun UserProfileView(
     var phone by rememberSaveable { mutableStateOf("") }
     var dialogState by rememberSaveable { mutableStateOf(false) }
     // var email by rememberSaveable { mutableStateOf("") }
-
+    val dataStore = StoreData(context)
     LaunchedEffect(key1 = "test") {
         mainViewModel.userDetail(1)
         mainViewModel.userDetailRes.observe(lifecycleOwner) { data ->
@@ -88,6 +89,9 @@ fun UserProfileView(
     if (dialogState)
         AlertDialogComponent { st ->
             if (st) {
+                scope.launch {
+                    dataStore.saveLoginStatus(false)
+                }
                 dialogState = false
                 navHostController.navigate(NavigationScreen.LoginScreen.route) {
                     launchSingleTop = true

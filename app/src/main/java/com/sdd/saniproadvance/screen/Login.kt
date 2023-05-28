@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
 import com.sdd.saniproadvance.utils.*
+import com.sdd.saniproadvance.utils.data_store.StoreData
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import com.sdd.saniproadvance.utils.navigation.view.ButtonWithCutCornerShape
 import com.sdd.saniproadvance.utils.navigation.view.MarginsToTop
@@ -55,6 +56,7 @@ fun LoginScreen(
     val configuration = LocalConfiguration.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var email by rememberSaveable { mutableStateOf("") }
+
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -62,7 +64,9 @@ fun LoginScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-
+    val dataStore = StoreData(context)
+    // a coroutine scope
+    val scope = rememberCoroutineScope()
     var validatePassword by rememberSaveable { mutableStateOf(true) }
     var isPasswordVisible by rememberSaveable { mutableStateOf(false)}
 
@@ -87,7 +91,12 @@ fun LoginScreen(
                     validatePassword = true
 
                     if (data?.password.equals(password,true)){
-                        navigateToDashboardScreen(navHostController)
+                        scope.launch {
+                            dataStore.saveLoginStatus(true)
+                            navigateToDashboardScreen(navHostController)
+                        }
+
+
                     }else{
                         validatePassword = false
                         validatePasswordError = "Invalided password"
@@ -235,7 +244,7 @@ fun LoginScreen(
         MarginsToTop(screenHeight = 10.dp)
         ButtonWithCutCornerShape(stringResource(id = R.string.login)){
             if (validateData(email,password)){
-                CoroutineScope(Dispatchers.Main).launch {
+                scope.launch {
                     mainViewModel.userLogin(email)
                  //   val data =   mainViewModel.userRepository.loginUser(email)
 /*
@@ -281,6 +290,7 @@ fun LoginScreen(
 }
 
  fun navigateToDashboardScreen(navHostController: NavHostController) {
+
     navHostController.navigate(NavigationScreen.DashboardScreen.createRoute("hello this is Dashboard Screen")){
         launchSingleTop =true
     }

@@ -16,19 +16,43 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.sdd.saniproadvance.R
 import com.sdd.saniproadvance.utils.appIcon
+import com.sdd.saniproadvance.utils.data_store.StoreData
 import com.sdd.saniproadvance.utils.hideSystemUI
 import com.sdd.saniproadvance.utils.navigation.NavigationScreen
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SplashScreen(navHostController: NavHostController,context: Activity){
+    val dataStore = StoreData(context)
+    // a coroutine scope
+    val scope = rememberCoroutineScope()
+    var loginStatus:Boolean = false
    // context.hideSystemUI()
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,horizontalAlignment = Alignment.CenterHorizontally) {
         appIcon()
+        scope.launch {
+
+
+            dataStore.getLoginStatus.collectLatest {
+                if (it != null) {
+                    loginStatus =  it
+                }
+            }
+
+        }
+
         RememberUpdatedState {
-            navHostController.navigate(NavigationScreen.LoginScreen.route){
+            var route:String =""
+            route = if (loginStatus){
+                NavigationScreen.DashboardScreen.route
+            }else{
+                NavigationScreen.LoginScreen.route
+            }
+
+            navHostController.navigate(route){
                 /** popUpTo(NavigationScreen.LoginScreen.route)
                  * remove all back stack and navigate to target Screen like Login
                  * [inclusive = true] remove all back stack and close Activity and Add Screen name

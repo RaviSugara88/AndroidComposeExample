@@ -7,6 +7,7 @@ A Simple app in jetpack compose , where we can implement Login , Registration an
 `Jetpack Compose`
 `Retrofit`
 `Room Database`
+`DataStore`
 `Dagger Hilt`
 `Coroutines and Flow`
 `Navigation Architecture`
