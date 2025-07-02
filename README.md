@@ -1,6 +1,17 @@
 # AndroidComposeExample 
+Jetpack Compose Demo Application
 
-A Simple app in jetpack compose , where we can implement Login , Registration and Api Handling through Test Api
+This demo application showcases the fundamentals of modern Android development using Jetpack Compose. It features a clean implementation of core functionalities such as:
+
+User Authentication: Includes fully functional Login and Registration screens using Compose UI. User credentials and profile information are securely saved using Room Database.
+
+Network Data Handling: Integrates Retrofit with a test REST API to fetch and display dynamic content. Implements proper API response handling with coroutines and ViewModel.
+
+Local Persistence: Utilizes Room to persist user data locally and demonstrate offline support.
+
+Smooth Navigation: Built with Jetpack Navigation Compose to provide seamless transitions between screens with state management and backstack support.
+
+This project is a solid example of a Compose-first architecture combining MVVM, Room, and Retrofit, serving as a great starting point for real-world Android applications.
 
 ### Tech Stack
 
@@ -8,7 +19,7 @@ A Simple app in jetpack compose , where we can implement Login , Registration an
 `Retrofit`
 `Room Database`
 `DataStore`
-`Dagger Hilt`
+`Hilt`
 `Coroutines and Flow`
 `Navigation Architecture`
 `CICD Pipeline using CircleCI`
